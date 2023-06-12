@@ -23,19 +23,6 @@ class InfoMessage:
                 f'Ср. скорость: {self.speed} км/ч; '
                 f'Потрачено ккал: {self.calories}.')
 
-# """Информационное сообщение о тренировке."""
-#     def get_message(self,
-#                     training_type,
-#                     duration,
-#                     distance,
-#                     speed,
-#                     calories) -> str:
-#         return (f'Тип тренировки: {training_type}; '
-#                 f'Длительность: {duration} ч.;'
-#                 f'Дистанция: {distance} км; '
-#                 f'Ср. скорость: {speed} км/ч; '
-#                 f'Потрачено ккал: {calories}.')
-
 
 class Training:
     """Базовый класс тренировки."""
@@ -77,17 +64,49 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    pass
+    CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
+    CALORIES_MEAN_SPEED_SHIFT: float = 1.79
+
+    def get_spent_calories(self) -> float:
+        return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
+                + self.CALORIES_MEAN_SPEED_SHIFT)
+                * self.weight / M_IN_KM * self.duration * self.MIN_IN_H)
 
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    pass
+    K_1: float = 0.035  # Коэффициент для подсчета калорий.
+    K_2: float = 0.029  # Коэффициент для подсчета калорий.
+    M_IN_SM: float = 0.01
+    S_IN_MIN: int = 3600
+
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 height: float) -> None:
+        super().__init__(action, duration, weight)
+        self.height = height
+
+    def get_spent_calories(self) -> float:
+        """Получить количество затраченных калорий."""
+        return ((self.K_1 * self.weight
+                + ((self.get_mean_speed() / self.S_IN_MIN
+                    * M_IN_KM)**2 / self.height * self.M_IN_SM)
+                * self.K_2 * self.weight) * self.duration * self.MIN_IN_H)
 
 
 class Swimming(Training):
     """Тренировка: плавание."""
-    pass
+    def __init__(self, 
+                 stroke_count: int, 
+                 action: int, 
+                 duration: float, 
+                 weight: float, 
+                 height: float) -> None:
+        super().__init__(action, duration, weight)
+        self.stroke_count = stroke_count
+        self.height = height
 
 
 def read_package(workout_type: str, data: list) -> Training:
