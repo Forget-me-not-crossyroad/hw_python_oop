@@ -98,25 +98,38 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
-    def __init__(self, 
-                 stroke_count: int, 
-                 action: int, 
-                 duration: float, 
-                 weight: float, 
-                 height: float) -> None:
+    LEN_STEP: float = 1.38
+    SPEED_COEFF: float = 1.1
+    MULT_COEFF: float = 2
+
+    def __init__(self,
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 count_pool: int,
+                 length_pool: float) -> None:
         super().__init__(action, duration, weight)
-        self.stroke_count = stroke_count
-        self.height = height
+        self.count_pool = count_pool
+        self.length_pool = length_pool
+
+    def get_mean_speed(self) -> float:
+        """Получить среднюю скорость движения."""
+        return self.length_pool * self.count_pool / M_IN_KM / self.duration
+
+    def get_spent_calories(self) -> float:
+        """Получить количество затраченных калорий."""
+        return ((self.get_mean_speed() + self.SPEED_COEFF)
+                * self.MULT_COEFF * self.weight * self.duration)
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     if workout_type == 'RUN':
-        return Running(*[data])
+        return Running(*data)
     if workout_type == 'WLK':
-        return Running(*[data])
+        return SportsWalking(*data)
     if workout_type == 'SWM':
-        return Running(*[data])
+        return Swimming(*data)
     return None
 
 
