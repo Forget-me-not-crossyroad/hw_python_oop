@@ -14,6 +14,7 @@ class InfoMessage:
         self.calories = calories
 
     def get_message(self) -> str:
+        """Получить информационное сообщение о тренировке."""
         return (f'Тип тренировки: {self.training_type}; '
                 f'Длительность: {self.duration:.3f} ч.; '
                 f'Дистанция: {self.distance:.3f} км; '
@@ -23,9 +24,9 @@ class InfoMessage:
 
 class Training:
     """Базовый класс тренировки."""
-    LEN_STEP: float = 0.65
-    MIN_IN_H: int = 60
-    M_IN_KM: int = 1000
+    LEN_STEP: float = 0.65  # Константа количества метров в одном шаге.
+    MIN_IN_H: int = 60  # Константа для перевода часов в минуты.
+    M_IN_KM: int = 1000  # Константа для перевода километров в метры.
 
     def __init__(self,
                  action: int,
@@ -50,9 +51,6 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        # distance: float = self.get_distance()
-        # speed: float = self.get_mean_speed()
-        # calories: float = self.get_spent_calories()
         return InfoMessage(self.__class__.__name__,
                            self.duration,
                            self.get_distance(),
@@ -62,10 +60,13 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    CALORIES_MEAN_SPEED_MULTIPLIER: int = 18
-    CALORIES_MEAN_SPEED_SHIFT: float = 1.79
+    CALORIES_MEAN_SPEED_MULTIPLIER: int = 18  # Константа умножения
+    # калорий при беге.
+    CALORIES_MEAN_SPEED_SHIFT: float = 1.79  # Константа увеличения
+    # калорий при беге.
 
     def get_spent_calories(self) -> float:
+        """Получить количество затраченных калорий для бега (Running)."""
         return ((self.CALORIES_MEAN_SPEED_MULTIPLIER * self.get_mean_speed()
                 + self.CALORIES_MEAN_SPEED_SHIFT)
                 * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_H)
@@ -73,10 +74,10 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    K_1: float = 0.035  # Коэффициент для подсчета калорий.
-    K_2: float = 0.029  # Коэффициент для подсчета калорий.
-    M_IN_SM: float = 100
-    KPH_TO_MPS: float = 0.278
+    K_1: float = 0.035  # Коэффициент 1 подсчета калорий при спортивной ходьбе.
+    K_2: float = 0.029  # Коэффициент 2 подсчета калорий при спортивной ходьбе.
+    M_IN_SM: float = 100  # Константа для перевода метра в сантиметры.
+    KPH_TO_MPS: float = 0.278  # Константа для перевода км/ч в м/c.
 
     def __init__(self,
                  action: int,
@@ -87,7 +88,9 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Получить количество затраченных калорий
+          для спортивной ходьбы (SportsWalking).
+        """
         return ((self.K_1 * self.weight
                 + ((self.get_mean_speed() * self.KPH_TO_MPS)**2
                     / (self.height / self.M_IN_SM))
@@ -96,9 +99,9 @@ class SportsWalking(Training):
 
 class Swimming(Training):
     """Тренировка: плавание."""
-    LEN_STEP: float = 1.38
-    SPEED_COEFF: float = 1.1
-    MULT_COEFF: float = 2
+    LEN_STEP: float = 1.38  # Константа количества метров в одном гребке.
+    SPEED_COEFF: float = 1.1  # Константа увеличения калорий при плавании.
+    MULT_COEFF: float = 2  # Константа умножения калорий при плавании.
 
     def __init__(self,
                  action: int,
@@ -111,12 +114,12 @@ class Swimming(Training):
         self.length_pool = length_pool
 
     def get_mean_speed(self) -> float:
-        """Получить среднюю скорость движения."""
+        """Получить среднюю скорость движения для плавания (Swimming)."""
         return (self.length_pool * self.count_pool
                 / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Получить количество затраченных калорий для плавания (Swimming)."""
         return ((self.get_mean_speed() + self.SPEED_COEFF)
                 * self.MULT_COEFF * self.weight * self.duration)
 
