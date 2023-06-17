@@ -1,4 +1,4 @@
-MESSAGE = (
+MESSAGE: str = (
     'Тип тренировки: {training_type}; '
     'Длительность: {duration:.3f} ч.; '
     'Дистанция: {distance:.3f} км; '
@@ -67,7 +67,7 @@ class Training:
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
         return InfoMessage(
-            self.__class__.__name__,
+            type(self).__name__,
             self.duration,
             self.get_distance(),
             self.get_mean_speed(),
