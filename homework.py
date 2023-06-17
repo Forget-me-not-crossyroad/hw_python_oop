@@ -1,3 +1,5 @@
+from dataclasses import asdict, dataclass
+
 MESSAGE: str = (
     'Тип тренировки: {training_type}; '
     'Длительность: {duration:.3f} ч.; '
@@ -7,32 +9,18 @@ MESSAGE: str = (
 )
 
 
+@dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
-
-    def __init__(
-        self,
-        training_type: str,
-        duration: float,
-        distance: float,
-        speed: float,
-        calories: float,
-    ):
-        self.training_type = training_type
-        self.duration = duration
-        self.distance = distance
-        self.speed = speed
-        self.calories = calories
+    training_type: str
+    duration: float
+    distance: float
+    speed: float
+    calories: float
 
     def get_message(self) -> str:
         """Получить информационное сообщение о тренировке."""
-        return MESSAGE.format(
-            training_type=self.training_type,
-            duration=self.duration,
-            distance=self.distance,
-            speed=self.speed,
-            calories=self.calories,
-        )
+        return MESSAGE.format(**asdict(self))
 
 
 class Training:
