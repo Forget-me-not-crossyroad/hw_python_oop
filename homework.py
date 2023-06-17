@@ -1,3 +1,12 @@
+MESSAGE = (
+    'Тип тренировки: {training_type}; '
+    'Длительность: {duration:.3f} ч.; '
+    'Дистанция: {distance:.3f} км; '
+    'Ср. скорость: {speed:.3f} км/ч; '
+    'Потрачено ккал: {calories:.3f}.'
+)
+
+
 class InfoMessage:
     """Информационное сообщение о тренировке."""
 
@@ -17,12 +26,12 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """Получить информационное сообщение о тренировке."""
-        return (
-            f'Тип тренировки: {self.training_type}; '
-            f'Длительность: {self.duration:.3f} ч.; '
-            f'Дистанция: {self.distance:.3f} км; '
-            f'Ср. скорость: {self.speed:.3f} км/ч; '
-            f'Потрачено ккал: {self.calories:.3f}.'
+        return MESSAGE.format(
+            training_type=self.training_type,
+            duration=self.duration,
+            distance=self.distance,
+            speed=self.speed,
+            calories=self.calories,
         )
 
 
@@ -161,7 +170,7 @@ def read_package(workout_type: str, data: list) -> Training:
     workout_type_dict: dict = {
         'SWM': Swimming,
         'RUN': Running,
-        'WLK': SportsWalking
+        'WLK': SportsWalking,
     }
 
     if workout_type in workout_type_dict:
