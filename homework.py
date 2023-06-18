@@ -12,6 +12,7 @@ MESSAGE: str = (
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
+
     training_type: str
     duration: float
     distance: float
@@ -153,12 +154,39 @@ class Swimming(Training):
         )
 
 
+class Cat:
+    def __init__(self, height: int, weight: int) -> None:
+        self.height = height
+        self.weight = weight
+
+
+class Dance:
+    def __init__(
+        self,
+        training_type: str,
+        duration: float,
+        distance: float,
+        speed: float,
+        calories: float,
+    ) -> None:
+        self.training_type = training_type
+        self.duration = duration
+        self.distance = distance
+        self.speed = speed
+        self.calories = calories
+
+
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
     workout_type_dict: dict = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking,
+        'CAT': Cat,  # Исправлено на Cat (вместо Dog),
+        # т.к. падал NameError при каждом старте даже
+        # при 'except NameError' в блоке '__main__'
+        'DANCE': Dance,
+        'NO_TYPE': None,
     }
 
     if workout_type not in workout_type_dict:
@@ -180,8 +208,25 @@ if __name__ == '__main__':
         ('SWM', [720, 1, 80, 25, 40]),
         ('RUN', [15000, 1, 75]),
         ('WLK', [9000, 1, 75, 180]),
+        ('DANCE', [7000, 2, 75, 180]),
+        ('CAT', [77, 1, 250, 200]),
+        ('SWM', [1, 80, 25, 40]),
+        ('NO_TYPE', [1, 80, 25, 40]),
+        ('JUMP', [1, 80, 25, 40]),
     ]
 
     for workout_type, data in packages:
-        training = read_package(workout_type, data)
-        main(training)
+        try:
+            training = read_package(workout_type, data)
+            main(training)
+        except KeyError:
+            print('Неизвестный тип терировки')
+        except TypeError as t:
+            if 'positional' in repr(t):
+                print('Передано неверное количество аргументов')
+            if 'NoneType' in repr(t):
+                print('Передано пустое значение (NoneType)')
+            ...
+        except AttributeError:
+            print('Данный класс не содержит нужного метода или атрибута')
+#  Благодарю за доп. задание
