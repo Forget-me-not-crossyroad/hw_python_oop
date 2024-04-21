@@ -1,4 +1,4 @@
-# Модуль фитнес-трекера
+ # Модуль фитнес-трекера
 ## Финальный проект спринта: модуль фитнес-трекера
 Задачей итогового проекта второго спринта курса "Python-разработчик" было создать программный модуль для фитнес-трекера, используя парадигму ООП. Модуль должен рассчитывать и отображать результаты тренировки.
 
@@ -32,44 +32,38 @@
 
 Клонируем проект:
 
-```bash
-git clone https://github.com/themasterid/hw_python_oop.git
 ```
-
-или
-
-```bash
-git clone git@github.com:themasterid/hw_python_oop.git
+git clone https://github.com/Forget-me-not-crossyroad/hw_python_oop.git
 ```
 
 Переходим в папку с проектом:
 
-```bash
+```
 cd hw_python_oop
 ```
 
 Устанавливаем виртуальное окружение:
 
-```bash
+```
 python -m venv venv
 ```
 
 Активируем виртуальное окружение:
 
-```bash
+```
 source venv/bin/activate
 ```
 
 Для деактивации виртуального окружения выполним (после работы):
-```bash
+```
 deactivate
 ```
 
 Устанавливаем зависимости:
 
-```bash
+```
 python -m pip install --upgrade pip
 ```
-```bash
+```
 pip install -r requirements.txt
 ```
